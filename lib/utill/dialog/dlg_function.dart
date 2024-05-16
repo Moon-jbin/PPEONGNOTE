@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:ppeongnote/utill/dialog/component/create_score.dart';
+import 'package:ppeongnote/utill/dialog/component/modify_score.dart';
 import 'package:ppeongnote/utill/dialog/dlg_form.dart';
 
 ///```
@@ -22,5 +24,10 @@ import 'package:ppeongnote/utill/dialog/dlg_form.dart';
 
 showScoreCreateDlgFn(BuildContext context) {
   return showCustomDialog(
-      context, (context) => customDialogForm(content: Text('점수 수정')));
+      context, (context) => customDialogForm(content: CreateScore()));
+}
+
+showScoreModifyDlgFn(BuildContext context, {required int scoreIdx}) {
+  return showCustomDialog(context,
+      (context) => customDialogForm(content: ModifyScore(scoreIdx: scoreIdx)));
 }

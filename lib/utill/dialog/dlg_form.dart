@@ -12,7 +12,7 @@ showCustomDialog(BuildContext context, Function showWidget,
   return await showGeneralDialog(
       barrierColor: Colors.black.withOpacity(0.5),
       barrierLabel: '',
-      barrierDismissible: dismissible,
+      barrierDismissible: false,
       context: context,
       routeSettings: routeSettings,
       pageBuilder: (context, animation1, animation2) => showWidget(context));
@@ -23,13 +23,10 @@ showCustomDialog(BuildContext context, Function showWidget,
 /// @param {Widget} content - Dialog 내용 위젯
 ///```
 customDialogForm({required Widget content}) {
-  return WillPopScope(
-    onWillPop: () async => false,
-    child: AlertDialog(
-      contentPadding: EdgeInsets.zero,
-      shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(0))),
-      content: content,
-    ),
+  return AlertDialog(
+    contentPadding: EdgeInsets.zero,
+    shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.all(Radius.circular(0))),
+    content: content,
   );
 }
