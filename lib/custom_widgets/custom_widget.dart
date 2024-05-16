@@ -5,12 +5,26 @@ import 'package:ppeongnote/providers/score_provider.dart';
 import 'package:ppeongnote/utill/dialog/dlg_function.dart';
 
 class CustomWidget {
-  static Widget playerSelectBox() {
-    return Container(
-      margin: EdgeInsets.all(10.w),
-      width: 200.w,
-      height: 100.h,
-      color: Colors.red,
+  ///```
+  /// 플레이어 선택창
+  /// @param {int} type - 인원 명 수 (ex : type = 3 => 3명, type = 4 => 4명 )
+  ///```
+  static Widget playerSelectBox({required int type}) {
+    return InkWell(
+      onTap: () {
+        
+      },
+      child: Container(
+        alignment: Alignment.center,
+        margin: EdgeInsets.all(10.w),
+        width: 200.w,
+        height: 100.h,
+        color: Colors.grey,
+        child: Text(
+          "$type명",
+          style: TextStyle(fontSize: 25.spMin, fontWeight: FontWeight.bold),
+        ),
+      ),
     );
   }
 

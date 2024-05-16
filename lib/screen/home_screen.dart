@@ -26,8 +26,18 @@ class MainUI extends HookConsumerWidget {
         width: size.width,
         height: size.height,
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: List.generate(3, (index) => CustomWidget.playerSelectBox()),
+          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+          children: [
+            Text(
+              '플레이 할 인원 수를 선택해주세요.',
+              style: TextStyle(fontSize: 25.spMin, fontWeight: FontWeight.bold),
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: List.generate(
+                  3, (index) => CustomWidget.playerSelectBox(type: index + 3)),
+            )
+          ],
         ));
   }
 }
