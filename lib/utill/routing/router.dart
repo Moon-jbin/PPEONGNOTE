@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:ppeongnote/screen/home_screen.dart';
+import 'package:ppeongnote/screen/score_screen.dart';
 import 'package:ppeongnote/utill/routing/router_name.dart';
 
 CustomTransitionPage customTransitionPage(GoRouterState state, Widget child) {
@@ -50,17 +51,17 @@ final GoRouter router = GoRouter(
     //     key: state.pageKey,
     //   ),
     // ),
-    // GoRoute(
-    //   name: IntroRoute,
-    //   path: IntroRoute,
-    //   builder: (BuildContext context, GoRouterState state) => IntroScreen(
-    //     key: state.pageKey,
-    //   ),
-    // ),
     GoRoute(
       name: HomeRoute,
       path: HomeRoute,
       builder: (BuildContext context, GoRouterState state) => HomeScreen(
+        key: state.pageKey,
+      ),
+    ),
+    GoRoute(
+      name: ScoreRoute,
+      path: ScoreRoute,
+      builder: (BuildContext context, GoRouterState state) => ScoreScreen(
         key: state.pageKey,
       ),
       // pageBuilder: (context, state) =>
