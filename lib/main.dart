@@ -20,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     SystemUiOverlayStyle mySystemTheme = SystemUiOverlayStyle.light
-        .copyWith(systemNavigationBarColor: Colors.transparent);
+        .copyWith(systemNavigationBarColor: Colors.blue.shade100);
     return ScreenUtilInit(
       designSize: size.width >= 600
           // ? const Size(600.9389348488247, 913.4271809702136)

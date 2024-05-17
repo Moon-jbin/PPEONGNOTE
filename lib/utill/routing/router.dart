@@ -41,7 +41,7 @@ CustomTransitionPage customTransitionPage(GoRouterState state, Widget child) {
 // );
 
 final GoRouter router = GoRouter(
-  initialLocation: '/score',
+  initialLocation: '/',
   debugLogDiagnostics: true,
   routes: <RouteBase>[
     // GoRoute(

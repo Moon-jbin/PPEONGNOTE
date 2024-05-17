@@ -10,7 +10,7 @@ final scoreProvider =
 
 class PlayerNameProvider extends StateNotifier<List<String>> {
   // test
-  PlayerNameProvider() : super(['종빈', '은아', '기훈']);
+  PlayerNameProvider() : super([]);
 
   void initState() => state = [];
 

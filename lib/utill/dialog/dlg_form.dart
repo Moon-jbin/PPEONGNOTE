@@ -26,7 +26,8 @@ customDialogForm({required Widget content}) {
   return AlertDialog(
     contentPadding: EdgeInsets.zero,
     shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(0))),
+        borderRadius: BorderRadius.all(Radius.circular(30))),
+    elevation: 10,
     content: content,
   );
 }

@@ -8,11 +8,12 @@ class HomeScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    double statusBarheight = MediaQuery.of(context).viewPadding.top;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.pink,
+      body: Padding(
+        padding: EdgeInsets.only(top: statusBarheight),
+        child: MainUI(),
       ),
-      body: MainUI(),
     );
   }
 }
@@ -21,23 +22,35 @@ class MainUI extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
-    return Container(
-        alignment: Alignment.center,
-        width: size.width,
-        height: size.height,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-          children: [
-            Text(
-              '플레이 할 인원 수를 선택해주세요.',
-              style: TextStyle(fontSize: 25.spMin, fontWeight: FontWeight.bold),
-            ),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: List.generate(
-                  3, (index) => CustomWidget.playerSelectBox(type: index + 3)),
-            )
-          ],
-        ));
+    return SingleChildScrollView(
+      child: Container(
+          alignment: Alignment.center,
+          width: size.width,
+          height: size.height,
+          decoration: CustomWidget.bgColorWidget(),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                margin: EdgeInsets.only(bottom: 40.h),
+                child: Text(
+                  '플레이 할 인원 수를 선택해주세요.',
+                  style: TextStyle(
+                    fontSize: 25.spMin,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue.shade900,
+                  ),
+                ),
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: List.generate(
+                    3,
+                    (index) =>
+                        CustomWidget.playerSelectBox(context, type: index + 3)),
+              )
+            ],
+          )),
+    );
   }
 }
