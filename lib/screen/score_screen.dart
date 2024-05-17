@@ -54,27 +54,49 @@ class MainUI extends HookConsumerWidget {
       decoration: CustomWidget.bgColorWidget(),
       child: Column(
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
-            children: List.generate(
-              playerNameProviderWatch.length,
-              (playerIdx) => Text(playerNameProviderWatch[playerIdx]),
-              // Column(
-              //       // mainAxisSize: MainAxisSize.min,
-              //       children: [
-              //         Text(playerNameProviderWatch[playerIdx]),
-              //         scoreProviderWatch[playerNameProviderWatch[0]] == null
-              //             ? CustomWidget.socoreWriteStart(context)
-              //             : TestScoreListView()
-              //       ],
-              //     )
-            ),
-          ),
           Expanded(
-              child: Container(
-                  child: scoreProviderWatch[playerNameProviderWatch[0]] == null
-                      ? CustomWidget.socoreWriteStart(context)
-                      : const ScoreListView())),
+              flex: scoreProviderWatch[playerNameProviderWatch[0]] == null
+                  ? 0
+                  : 1,
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: List.generate(
+                        playerNameProviderWatch.length,
+                        (playerIdx) => Column(
+                              // mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(playerNameProviderWatch[playerIdx]),
+                                scoreProviderWatch[
+                                            playerNameProviderWatch[0]] ==
+                                        null
+                                    ? Container()
+                                    : TestScoreListView(playerIdx: playerIdx)
+                              ],
+                            )
+                        // Text(playerNameProviderWatch[playerIdx]),
+
+                        ),
+                  ),
+                  scoreProviderWatch[playerNameProviderWatch[0]] == null
+                      ? Container()
+                      : IconButton(
+                          onPressed: () {
+                            showScoreCreateDlgFn(context);
+                          },
+                          icon: Icon(Icons.add))
+                ],
+              )),
+          scoreProviderWatch[playerNameProviderWatch[0]] == null
+              ? Expanded(child: CustomWidget.socoreWriteStart(context))
+              : Container(),
+          // Expanded(
+          //     child: Container(
+          //         child: scoreProviderWatch[playerNameProviderWatch[0]] == null
+          //             ? CustomWidget.socoreWriteStart(context)
+          //             : const ScoreListView())),
           CustomWidget.bottomSumScore(ref, size),
         ],
       ),
@@ -114,6 +136,9 @@ class ScoreListView extends HookConsumerWidget {
 }
 
 class TestScoreListView extends HookConsumerWidget {
+  int playerIdx;
+
+  TestScoreListView({super.key, required this.playerIdx});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scoreProviderWatch = ref.watch(scoreProvider);
@@ -122,29 +147,57 @@ class TestScoreListView extends HookConsumerWidget {
     int scoreLength = scoreProviderWatch[playerNameProviderWatch[0]] != null
         ? scoreProviderWatch[playerNameProviderWatch[0]]![0].length
         : 0;
+    print("scoreLength=> $scoreLength");
 
     return Container(
-      width: 50.w,
-      // height: 20,
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: scoreLength,
-        itemBuilder: (BuildContext context, int scoreIdx) {
-          return Column(
-            children: [
-              Text('점수'),
-              // CustomWidget.scoreListTile(context, ref, scoreIdx: scoreIdx),
-              // scoreIdx == scoreLength - 1
-              //     ? IconButton(
-              //         onPressed: () {
-              //           showScoreCreateDlgFn(context);
-              //         },
-              //         icon: Icon(Icons.add))
-              //     : Container()
-            ],
-          );
-        },
-      ),
-    );
+        width: 70.w,
+        // height: 20,
+        child: ListView.builder(
+            shrinkWrap: true,
+            itemCount: scoreLength,
+            itemBuilder: (BuildContext context, int scoreIdx) {
+              String playerScore =
+                  scoreProviderWatch[playerNameProviderWatch[playerIdx]]![0]
+                          [scoreIdx]
+                      .toString();
+              String playerSumScore =
+                  scoreProviderWatch[playerNameProviderWatch[playerIdx]]![1]
+                          [scoreIdx]
+                      .toString();
+              return InkWell(
+                onTap: () {
+                  showScoreModifyDlgFn(context, scoreIdx: scoreIdx);
+                },
+                child: Container(
+                  height: 50.h,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Text(
+                        playerScore,
+                        // style: TextStyle(fontSize: 25.spMin),
+                      ),
+                      SizedBox(
+                        width: 10.w,
+                      ),
+                      Text(playerSumScore)
+                    ],
+                  ),
+                ),
+              );
+            }));
+    // Column(
+    //   children: [
+    //     Text('점수'),
+    // CustomWidget.scoreListTile(context, ref, scoreIdx: scoreIdx),
+    //     // scoreIdx == scoreLength - 1
+    //     //     ? IconButton(
+    //     //         onPressed: () {
+    //     //           showScoreCreateDlgFn(context);
+    //     //         },
+    //     //         icon: Icon(Icons.add))
+    //     //     : Container()
+    //   ],
+    // );
   }
 }
