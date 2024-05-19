@@ -3,8 +3,9 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ppeongnote/custom_widgets/custom_widget.dart';
-import 'package:ppeongnote/providers/score_provider.dart';
+import 'package:ppeongnote/providers/global_provider.dart';
 import 'package:ppeongnote/utill/custom_style.dart';
+import 'package:ppeongnote/utill/dialog/dlg_function.dart';
 import 'package:ppeongnote/utill/routing/navigation_service.dart';
 import 'package:ppeongnote/utill/routing/router_name.dart';
 
@@ -79,7 +80,8 @@ class PlayerName extends HookConsumerWidget {
                 playerNameProviderRead.setPlayer(playerNameList);
 
                 Navigator.pop(context);
-                NavigationService().routerReplace(context, ScoreRoute);
+                showPenaltyDlgFn(context, type: type);
+                // NavigationService().routerReplace(context, ScoreRoute);
               },
               child: Text('확인', style: CustomStyle.defaultStyle),
             ),
@@ -109,63 +111,51 @@ class PlayerNameTextfeild extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    ValueNotifier<List<TextEditingController>> trControllerList = useState([]);
+
+    Widget playerTfList(){
+      return Column(
+        mainAxisSize: MainAxisSize.min,
+        children: List.generate(
+            type,
+                (index) => Container(
+              margin: EdgeInsets.all(10.w),
+              child: Row(
+                children: [
+                  Text(
+                    'Player ${index + 1} : ',
+                    style: CustomStyle.defaultStyle,
+                  ),
+                  Expanded(
+                      child: CustomWidget.customTextField(
+                          trControllerList.value[index],
+                          hintText: "Player Name"
+                      ))
+                ],
+              ),
+            )),
+      );
+    }
+
     if (type == 3) {
-      List<TextEditingController> trControllerList = [
+      trControllerList.value = [
         tfController_1,
         tfController_2,
         tfController_3
       ];
 
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-            type,
-            (index) => Container(
-                  margin: EdgeInsets.all(10.w),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Player ${index + 1} : ',
-                        style: CustomStyle.defaultStyle,
-                      ),
-                      Expanded(
-                          child: CustomWidget.customTextField(
-                              trControllerList[index],
-                              hintText: "Player Name"
-                              ))
-                    ],
-                  ),
-                )),
-      );
+      return playerTfList();
     } else if (type == 4) {
-      List<TextEditingController> trControllerList = [
+       trControllerList.value = [
         tfController_1,
         tfController_2,
         tfController_3,
         tfController_4
       ];
 
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-            type,
-            (index) => Container(
-                  margin: EdgeInsets.all(10.w),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Player ${index + 1} : ',
-                        style: CustomStyle.defaultStyle,
-                      ),
-                      Expanded(
-                          child: CustomWidget.customTextField(
-                              trControllerList[index]))
-                    ],
-                  ),
-                )),
-      );
+      return playerTfList();
     } else {
-      List<TextEditingController> trControllerList = [
+      trControllerList.value = [
         tfController_1,
         tfController_2,
         tfController_3,
@@ -173,25 +163,7 @@ class PlayerNameTextfeild extends HookConsumerWidget {
         tfController_5,
       ];
 
-      return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: List.generate(
-            type,
-            (index) => Container(
-                  margin: EdgeInsets.all(10.w),
-                  child: Row(
-                    children: [
-                      Text(
-                        'Player ${index + 1} : ',
-                        style: CustomStyle.defaultStyle,
-                      ),
-                      Expanded(
-                          child: CustomWidget.customTextField(
-                              trControllerList[index]))
-                    ],
-                  ),
-                )),
-      );
+      return playerTfList();
     }
   }
 }

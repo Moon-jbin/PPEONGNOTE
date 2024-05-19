@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:ppeongnote/utill/dialog/component/create_score.dart';
 import 'package:ppeongnote/utill/dialog/component/modify_score.dart';
+import 'package:ppeongnote/utill/dialog/component/penalty_dlg.dart';
 import 'package:ppeongnote/utill/dialog/component/player_name.dart';
 import 'package:ppeongnote/utill/dialog/component/scoreback_notice.dart';
 import 'package:ppeongnote/utill/dialog/dlg_form.dart';
@@ -54,4 +55,15 @@ showPlayerNameDlgFn(BuildContext context, {required int type}) {
 showBackNoticeDlgFn(BuildContext context) {
   return showCustomDialog(
       context, (context) => customDialogForm(content: ScoreBackNotice()));
+}
+
+
+///```
+/// 벌칙 입력 Dlg
+///```
+showPenaltyDlgFn(BuildContext context, {
+  required int type
+}){
+  return showCustomDialog(
+      context, (context) => customDialogForm(content: PenaltyDlg(type: type)));
 }

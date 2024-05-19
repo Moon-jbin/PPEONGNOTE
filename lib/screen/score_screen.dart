@@ -1,8 +1,11 @@
+import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ppeongnote/custom_widgets/custom_widget.dart';
-import 'package:ppeongnote/providers/score_provider.dart';
+import 'package:ppeongnote/providers/global_provider.dart';
 import 'package:ppeongnote/utill/custom_style.dart';
 import 'package:ppeongnote/utill/dialog/dlg_function.dart';
 
@@ -11,19 +14,79 @@ class ScoreScreen extends HookConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final penaltyTitleWatch = ref.watch(penaltyTitleProvider);
+    final playerNameProviderWatch = ref.watch(playerNameProvider);
+    final penaltyContentWatch = ref.watch(penaltContentProvider);
+    final scoreProviderWatch = ref.watch(scoreProvider);
+    final gameResultRead = ref.read(gameResultProvider.notifier);
+
+    Size size = MediaQuery.of(context).size;
+
+    ValueNotifier<bool> isGameEnd = useState(false);
+
     return Scaffold(
-      backgroundColor: Colors.white,
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,
         leading: const Icon(Icons.menu),
         elevation: 1,
         shadowColor: Colors.black38,
-        title: Text(
-          '뻥공책',
-          style: CustomStyle.defaultStyle,
-        ),
+        title: penaltyTitleWatch.isEmpty? Container() :
+        Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            penaltyTitleWatch.isEmpty?
+                Container():
+                Text('($penaltyTitleWatch)', style: CustomStyle.defaultStyle),
+            Wrap(
+              children: List.generate(playerNameProviderWatch.length, (index) {
+
+                if(penaltyContentWatch["${index+1}"]!.isEmpty){
+                    return const Text("");
+                }else{
+                  return Text(
+                      "${index+1}등 : ${penaltyContentWatch["${index+1}"]}  "
+                      , style: TextStyle(
+                      fontSize: 12.spMin
+                  ));
+                }
+              } ),
+            )
+          ],
+        )
+
+        ,
         actions: [
+          TextButton(onPressed: (){
+
+            List<int> sumScoreList = [];
+            List<int> generalScoreList = [];
+            //게임 결과 리스트
+            List<String> gameResultList = [];
+            for(int i = 0; i< playerNameProviderWatch.length; i++){
+              sumScoreList.add(scoreProviderWatch[playerNameProviderWatch[i]]![1].last);
+              generalScoreList.add(scoreProviderWatch[playerNameProviderWatch[i]]![1].last);
+            }
+
+            // 정렬을 함. 기존 값에다가 해당 정렬한 값을 비교해야함.
+            sumScoreList.sort();
+
+            for(int score in generalScoreList){
+              int rank = 0;
+              for(int sumScore in sumScoreList){
+                rank++;
+                if(score == sumScore){
+                  print("score $score , rank : $rank, 벌칙내용 : ${penaltyContentWatch['$rank']}");
+                  gameResultList.add(penaltyContentWatch['$rank']!);
+                  break;
+                }
+              }
+            }
+
+            gameResultRead.setGameResult(gameResultList);
+
+            isGameEnd.value = true;
+          }, child: const Text('종료')),
           TextButton(
               onPressed: () {},
               child: IconButton(
@@ -36,71 +99,75 @@ class ScoreScreen extends HookConsumerWidget {
         onPopInvoked: (didPop) {
           showBackNoticeDlgFn(context);
         },
-        child: MainUI(),
+        child: MainUI(isGameEnd: isGameEnd),
       ),
     );
   }
 }
 
 class MainUI extends HookConsumerWidget {
+  ValueNotifier<bool> isGameEnd;
+  MainUI({super.key, required this.isGameEnd});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
     final scoreProviderWatch = ref.watch(scoreProvider);
     final playerNameProviderWatch = ref.watch(playerNameProvider);
-    // 플레이어가 반드시 정해진 후 해당 페이지 호출 할것
 
-    return Container(
-      decoration: CustomWidget.bgColorWidget(),
-      child: Column(
-        children: [
-          Expanded(
-              flex: scoreProviderWatch[playerNameProviderWatch[0]] == null
-                  ? 0
-                  : 1,
-              child: Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: List.generate(
-                        playerNameProviderWatch.length,
+
+    return
+          Container(
+            // height: size.height,
+            decoration: CustomWidget.bgColorWidget(),
+            child: Column(
+    mainAxisSize: MainAxisSize.min,
+    children: [
+      Expanded(
+          flex: scoreProviderWatch[playerNameProviderWatch[0]] == null
+              ? 0
+              : 1,
+          child: Column(
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: List.generate(
+                    playerNameProviderWatch.length,
                         (playerIdx) => Column(
-                              // mainAxisSize: MainAxisSize.min,
-                              children: [
-                                Text(playerNameProviderWatch[playerIdx]),
-                                scoreProviderWatch[
-                                            playerNameProviderWatch[0]] ==
-                                        null
-                                    ? Container()
-                                    : TestScoreListView(playerIdx: playerIdx)
-                              ],
-                            )
-                        // Text(playerNameProviderWatch[playerIdx]),
-
-                        ),
-                  ),
-                  scoreProviderWatch[playerNameProviderWatch[0]] == null
-                      ? Container()
-                      : IconButton(
-                          onPressed: () {
-                            showScoreCreateDlgFn(context);
-                          },
-                          icon: Icon(Icons.add))
-                ],
-              )),
-          scoreProviderWatch[playerNameProviderWatch[0]] == null
-              ? Expanded(child: CustomWidget.socoreWriteStart(context))
-              : Container(),
-          // Expanded(
-          //     child: Container(
-          //         child: scoreProviderWatch[playerNameProviderWatch[0]] == null
-          //             ? CustomWidget.socoreWriteStart(context)
-          //             : const ScoreListView())),
-          CustomWidget.bottomSumScore(ref, size),
-        ],
-      ),
-    );
+                      // mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(playerNameProviderWatch[playerIdx]),
+                        scoreProviderWatch[
+                        playerNameProviderWatch[0]] ==
+                            null
+                            ? Container()
+                            : TestScoreListView(playerIdx: playerIdx)
+                      ],
+                    )
+                ),
+              ),
+              scoreProviderWatch[playerNameProviderWatch[0]] == null
+                  ? Container()
+                  : IconButton(
+                  onPressed: () {
+                    showScoreCreateDlgFn(context);
+                  },
+                  icon: const Icon(Icons.add))
+            ],
+          )),
+      scoreProviderWatch[playerNameProviderWatch[0]] == null
+          ? Expanded(child: CustomWidget.socoreWriteStart(context))
+          : Container(),
+      // Expanded(
+      //     child: Container(
+      //         child: scoreProviderWatch[playerNameProviderWatch[0]] == null
+      //             ? CustomWidget.socoreWriteStart(context)
+      //             : const ScoreListView())),
+      // ,
+      CustomWidget.bottomSumScore(ref, size, isGameEnd: isGameEnd)
+    ],
+  ),
+          );
   }
 }
 
@@ -169,7 +236,7 @@ class TestScoreListView extends HookConsumerWidget {
                   showScoreModifyDlgFn(context, scoreIdx: scoreIdx);
                 },
                 child: Container(
-                  height: 50.h,
+                  height: 80.h,//50.h,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -180,7 +247,9 @@ class TestScoreListView extends HookConsumerWidget {
                       SizedBox(
                         width: 10.w,
                       ),
-                      Text(playerSumScore)
+                      Text(playerSumScore, style: TextStyle(
+                        color: scoreIdx == 0 ? Colors.transparent : null
+                      ),)
                     ],
                   ),
                 ),
