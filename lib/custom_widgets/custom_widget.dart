@@ -146,16 +146,15 @@ class CustomWidget {
     );
   }
 
-  static Widget bottomSumScore(WidgetRef ref, Size size,{
-    required ValueNotifier<bool> isGameEnd
-  }) {
+  static Widget bottomSumScore(WidgetRef ref, Size size,
+      {required ValueNotifier<bool> isGameEnd}) {
     final scoreProviderWatch = ref.watch(scoreProvider);
     final playerNameProviderWatch = ref.watch(playerNameProvider);
     final gameResultWatch = ref.watch(gameResultProvider);
 
     return Container(
       decoration: const BoxDecoration(
-        // color: Colors.red,
+          // color: Colors.red,
           borderRadius: BorderRadius.all(Radius.circular(50)),
           border: Border(top: BorderSide(color: Colors.black12, width: 5.0))),
       width: size.width,
@@ -163,7 +162,7 @@ class CustomWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children:
-          // generalScore
+            // generalScore
             List.generate(playerNameProviderWatch.length, (int playerIdx) {
           String playerSumScore = scoreProviderWatch.isEmpty
               ? "0"
@@ -171,14 +170,14 @@ class CustomWidget {
                   .last
                   .toString();
 
-          return
-            Row(children: [
+          return Row(
+            children: [
               Text(playerSumScore),
-              isGameEnd.value?
-                  Text(" > ${gameResultWatch[playerIdx]}"): Container()
-            ],)
-
-            ;
+              isGameEnd.value
+                  ? Text(" > ${gameResultWatch[playerIdx]}")
+                  : Container()
+            ],
+          );
         }),
       ),
     );

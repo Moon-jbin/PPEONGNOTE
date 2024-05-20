@@ -43,9 +43,16 @@ dependencies:
 
   #ui
   flutter_screenutil: ^5.9.0
+  
+  #comunication
+  shared_preferences: ^2.0.20
+  get_it: ^7.2.0
 
   #router
   go_router: ^14.1.1
+
+  #token
+  package_info_plus: ^4.0.2
 
 dev_dependencies:
   flutter_test:

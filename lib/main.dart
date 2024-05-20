@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ppeongnote/locator.dart';
 import 'package:ppeongnote/utill/routing/router.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+
+  initLocator();
 
   // FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
 
