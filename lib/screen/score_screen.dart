@@ -45,17 +45,13 @@ class ScoreScreen extends HookConsumerWidget {
     }, []);
 
     return Scaffold(
-      drawer: Drawer(
-          child: Padding(
-        padding: EdgeInsets.fromLTRB(0, statusBarheight * 2, 0, 30.h),
-        child: ismodifyPage
-            ? IconButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                icon: const Icon(Icons.arrow_back))
-            : CustomDrawer(),
-      )),
+      drawer: ismodifyPage
+          ? null
+          : Drawer(
+              child: Padding(
+              padding: EdgeInsets.fromLTRB(0, statusBarheight * 2, 0, 30.h),
+              child: CustomDrawer(),
+            )),
       appBar: AppBar(
         centerTitle: true,
         backgroundColor: Colors.white,

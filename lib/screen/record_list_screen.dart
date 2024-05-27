@@ -23,8 +23,8 @@ class RecordListScreen extends HookConsumerWidget {
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        leading: IconButton(
-            onPressed: () {}, icon: const Icon(Icons.arrow_back_ios_new)),
+        leading:
+            IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back)),
         title: Column(
           children: [
             const Text('게임 기록'),
