@@ -169,6 +169,7 @@ class CustomWidget {
               : scoreProviderWatch[playerNameProviderWatch[playerIdx]]![1]
                   .last
                   .toString();
+          print('씌바 => $gameResultWatch');
 
           return Row(
             children: [

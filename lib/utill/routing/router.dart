@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:go_router/go_router.dart';
 import 'package:ppeongnote/screen/home_screen.dart';
+import 'package:ppeongnote/screen/record_list_screen.dart';
 import 'package:ppeongnote/screen/score_screen.dart';
 import 'package:ppeongnote/utill/routing/router_name.dart';
 
@@ -64,8 +65,19 @@ final GoRouter router = GoRouter(
       builder: (BuildContext context, GoRouterState state) => ScoreScreen(
         key: state.pageKey,
       ),
+      
       // pageBuilder: (context, state) =>
       //     customTransitionPage(state, HomeScreen()),
     ),
+    GoRoute(
+      name: RecordListRoute,
+      path: RecordListRoute,
+      builder: (BuildContext context, GoRouterState state) => RecordListScreen(
+        key: state.pageKey,
+      ),
+      
+      // pageBuilder: (context, state) =>
+      //     customTransitionPage(state, HomeScreen()),
+    )
   ],
 );

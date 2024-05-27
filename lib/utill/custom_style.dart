@@ -6,5 +6,5 @@ class CustomStyle {
     fontWeight: FontWeight.bold,
   );
 
-  
+  static Border listDivider = Border(bottom: BorderSide(color: Colors.grey.shade300));
 }

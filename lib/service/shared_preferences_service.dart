@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class SharedPreferencesService {
   void setScoreData(ScoreDataInfo scoreDataInfo);
-
+  void updateScoreData(ScoreDataInfo scoreDataInfo, int index);
   List<ScoreDataInfo> getScoreData();
 
   void dataClear();
@@ -34,6 +33,26 @@ class SharedPreferencesServiceImp implements SharedPreferencesService {
   }
 
   @override
+  void updateScoreData(ScoreDataInfo scoreDataInfo, int index) async {
+    List<String> scoreList = prefs.getStringList('scoreList') ?? [];
+    List<ScoreDataInfo> decodeScoreList = [];
+    for (String scoreData in scoreList) {
+      decodeScoreList.add(ScoreDataInfo.fromJson(jsonDecode(scoreData)));
+    }
+
+    decodeScoreList.removeAt(index);
+    decodeScoreList.insert(index, scoreDataInfo);
+
+    // encode
+    List<String> encodeScoreList = [];
+    for (ScoreDataInfo scoreDataInfo in decodeScoreList) {
+      String encode = jsonEncode(scoreDataInfo.toJson());
+      encodeScoreList.add(encode);
+    }
+    await prefs.setStringList('scoreList', encodeScoreList);
+  }
+
+  @override
   List<ScoreDataInfo> getScoreData() {
     print(prefs.getStringList('scoreList'));
     List<String> scoreList = prefs.getStringList('scoreList') ?? [];
@@ -54,27 +73,51 @@ class SharedPreferencesServiceImp implements SharedPreferencesService {
 }
 
 class ScoreDataInfo {
-  final List<dynamic> nameList;
-  final Map<String, dynamic> scoreData;
-  final List<dynamic> resultScore;
+  final List<String> nameList;
+  final Map<String, List<List<int>>> scoreData;
+  final List<String> resultScore;
   final String penaltyTitle;
+  final Map<String, String> penaltyContent;
   final String date;
 
-  ScoreDataInfo(this.nameList, this.scoreData, this.resultScore,
-      this.penaltyTitle, this.date);
+  ScoreDataInfo(
+      {required this.nameList,
+      required this.scoreData,
+      required this.resultScore,
+      required this.penaltyTitle,
+      required this.penaltyContent,
+      required this.date});
 
-  ScoreDataInfo.fromJson(Map<String, dynamic> json)
-      : nameList = json['nameList'] ?? '',
-        scoreData = json['scoreData'] ?? {},
-        resultScore = json['resultScore'] ?? [],
-        penaltyTitle = json['penaltyTitle'] ?? '',
-        date = json['date'] ?? '';
+  factory ScoreDataInfo.fromJson(Map<String, dynamic> json) {
+    return ScoreDataInfo(
+      nameList: (json['nameList'] as List<dynamic>)
+          .map((item) => item as String)
+          .toList(),
+      scoreData: (json['scoreData'] as Map<String, dynamic>).map(
+        (key, value) => MapEntry(
+          key,
+          (value as List<dynamic>)
+              .map((list) =>
+                  (list as List<dynamic>).map((item) => item as int).toList())
+              .toList(),
+        ),
+      ),
+      resultScore: (json['resultScore'] as List<dynamic>)
+          .map((item) => item as String)
+          .toList(),
+      penaltyTitle: json['penaltyTitle'] as String,
+      penaltyContent: (json['penaltyContent'] as Map<String, dynamic>)
+          .map((key, value) => MapEntry(key, value as String)),
+      date: json['date'] as String,
+    );
+  }
 
   Map<String, dynamic> toJson() => {
         'nameList': nameList,
         'scoreData': scoreData,
         'resultScore': resultScore,
         'penaltyTitle': penaltyTitle,
+        'penaltyContent': penaltyContent,
         'date': date
       };
 

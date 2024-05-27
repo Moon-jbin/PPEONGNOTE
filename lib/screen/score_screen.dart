@@ -6,6 +6,7 @@ import 'package:ppeongnote/custom_widgets/custom_drawer.dart';
 import 'package:ppeongnote/custom_widgets/custom_widget.dart';
 import 'package:ppeongnote/locator.dart';
 import 'package:ppeongnote/providers/global_provider.dart';
+import 'package:ppeongnote/providers/score_provider.dart';
 import 'package:ppeongnote/service/shared_preferences_service.dart';
 import 'package:ppeongnote/utill/custom_style.dart';
 import 'package:ppeongnote/utill/dialog/dlg_function.dart';
@@ -18,26 +19,41 @@ class ScoreScreen extends HookConsumerWidget {
     final penaltyTitleWatch = ref.watch(penaltyTitleProvider);
     final playerNameProviderWatch = ref.watch(playerNameProvider);
     final penaltyContentWatch = ref.watch(penaltContentProvider);
-    final scoreProviderWatch = ref.watch(scoreProvider);
-    final gameResultRead = ref.read(gameResultProvider.notifier);
-    final gameResultWatch = ref.watch(gameResultProvider);
+    final scoreFunctionRead = ref.read(scoreFunctionProvider.notifier);
+    final spIndexRead = ref.read(spIndexProvider.notifier);
+    final spIndexWatch = ref.watch(spIndexProvider);
 
-    final SharedPreferencesService sharedPreferncesService =
-        locator<SharedPreferencesService>();
+    bool ismodifyPage = spIndexWatch >= 0;
 
     double statusBarheight = MediaQuery.of(context).viewPadding.top;
-    Size size = MediaQuery.of(context).size;
 
     ValueNotifier<bool> isGameEnd = useState(false);
-    ValueNotifier<List<ScoreDataInfo>> getScoreData =
-        useState(sharedPreferncesService.getScoreData());
+
+    useEffect(() {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (ismodifyPage) {
+          isGameEnd.value = true;
+        }
+      });
+      return () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (ismodifyPage) {
+            spIndexRead.initState();
+          }
+        });
+      };
+    }, []);
 
     return Scaffold(
       drawer: Drawer(
           child: Padding(
         padding: EdgeInsets.fromLTRB(0, statusBarheight * 2, 0, 30.h),
-        child: getScoreData.value.isEmpty
-            ? const Text('기록이 없습니다.')
+        child: ismodifyPage
+            ? IconButton(
+                onPressed: () {
+                  Navigator.pop(context);
+                },
+                icon: const Icon(Icons.arrow_back))
             : CustomDrawer(),
       )),
       appBar: AppBar(
@@ -55,84 +71,24 @@ class ScoreScreen extends HookConsumerWidget {
                       : Text(penaltyTitleWatch,
                           style: CustomStyle.defaultStyle),
                   Wrap(
-                    children:
-                        List.generate(playerNameProviderWatch.length, (index) {
-                      if (penaltyContentWatch["${index + 1}"]!.isEmpty) {
-                        return const Text("");
-                      } else {
-                        return Text(
-                            "${index + 1}등 : ${penaltyContentWatch["${index + 1}"]}  ",
-                            style: TextStyle(fontSize: 12.spMin));
-                      }
-                    }),
-                  )
+                      children: List.generate(playerNameProviderWatch.length,
+                          (index) {
+                    if (penaltyContentWatch["${index + 1}"]!.isEmpty) {
+                      return const Text("");
+                    } else {
+                      return Text(
+                          "${index + 1}등 : ${penaltyContentWatch["${index + 1}"]}  ",
+                          style: TextStyle(fontSize: 12.spMin));
+                    }
+                  }))
                 ],
               ),
         actions: [
           TextButton(
-              onPressed: () {
-                List<int> sumScoreList = [];
-                List<int> generalScoreList = [];
-                //게임 결과 리스트
-                List<String> gameResultList = [];
-                for (int i = 0; i < playerNameProviderWatch.length; i++) {
-                  sumScoreList.add(
-                      scoreProviderWatch[playerNameProviderWatch[i]]![1].last);
-                  generalScoreList.add(
-                      scoreProviderWatch[playerNameProviderWatch[i]]![1].last);
-                }
-
-                // 정렬을 함. 기존 값에다가 해당 정렬한 값을 비교해야함.
-                sumScoreList.sort();
-
-                for (int score in generalScoreList) {
-                  int rank = 0;
-                  for (int sumScore in sumScoreList) {
-                    rank++;
-                    if (score == sumScore) {
-                      print(
-                          "score $score , rank : $rank, 벌칙내용 : ${penaltyContentWatch['$rank']}");
-                      gameResultList.add(penaltyContentWatch['$rank']!);
-                      break;
-                    }
-                  }
-                }
-
-                gameResultRead.setGameResult(gameResultList);
-
-                isGameEnd.value = true;
-              },
-              child: const Text('종료')),
-          TextButton(
               onPressed: () {},
               child: IconButton(
                   onPressed: () {
-                    // String customCurrentTime =
-                    //     '$year년 $month월 $day일 $hour시 $minute분 $second초';
-                    // String customCurrentTime_2 =
-                    //     '$year/$month/$day $hour:$minute:$second';
-
-                    //결과 저장
-                    //이름리스트,스코어 데이터, 벌칙 내용, 벌칙 주제,
-
-                    DateTime currentData = DateTime.now();
-                    int year = currentData.year;
-                    int month = currentData.month;
-                    int day = currentData.day;
-
-                    String customCurrentTime = '$year/$month/$day';
-                    // print(customCurrentTime);
-
-                    sharedPreferncesService.setScoreData(ScoreDataInfo(
-                        playerNameProviderWatch,
-                        scoreProviderWatch,
-                        gameResultWatch,
-                        penaltyTitleWatch,
-                        customCurrentTime));
-
-                    print(
-                        "mjb sharedPreference Data : ${sharedPreferncesService.getScoreData()}");
-                    getScoreData.value = sharedPreferncesService.getScoreData();
+                    scoreFunctionRead.gameDataSave(ref, isGameEnd: isGameEnd);
                   },
                   icon: Icon(Icons.save, color: Colors.blue.shade900)))
         ],
@@ -190,7 +146,7 @@ class MainUI extends HookConsumerWidget {
                                               playerNameProviderWatch[0]] ==
                                           null
                                       ? Container()
-                                      : TestScoreListView(playerIdx: playerIdx)
+                                      : ScoreListView(playerIdx: playerIdx)
                                 ],
                               )),
                     ),
@@ -245,10 +201,10 @@ class MainUI extends HookConsumerWidget {
 //   }
 // }
 
-class TestScoreListView extends HookConsumerWidget {
+class ScoreListView extends HookConsumerWidget {
   int playerIdx;
 
-  TestScoreListView({super.key, required this.playerIdx});
+  ScoreListView({super.key, required this.playerIdx});
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final scoreProviderWatch = ref.watch(scoreProvider);

@@ -6,6 +6,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:ppeongnote/locator.dart';
 import 'package:ppeongnote/service/shared_preferences_service.dart';
+import 'package:ppeongnote/utill/routing/navigation_service.dart';
+import 'package:ppeongnote/utill/routing/router_name.dart';
 
 class CustomDrawer extends HookConsumerWidget {
   @override
@@ -38,11 +40,20 @@ class CustomDrawer extends HookConsumerWidget {
                 ),
                 child: ListTile(
                   title: Text(settingTitle[index]),
+                  onTap: () {
+                    if (index == 0) {
+                      //게임 기록
+                      NavigationService()
+                          .routerReplace(context, RecordListRoute);
+                    } else if (index == 1) {
+                      //설정
+                    }
+                  },
                 )),
           ),
         ),
-        Spacer(),
-        Text('Ver $versionCode')
+        const Spacer(),
+        Text('Ver ${versionCode.value}')
       ],
     );
 
