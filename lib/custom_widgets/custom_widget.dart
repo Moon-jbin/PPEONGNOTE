@@ -154,12 +154,13 @@ class CustomWidget {
     final gameResultWatch = ref.watch(gameResultProvider);
 
     return Container(
+      padding: EdgeInsets.only(top: 3.h),
+      alignment: Alignment.topCenter,
       decoration: const BoxDecoration(
-          // color: Colors.red,
           borderRadius: BorderRadius.all(Radius.circular(50)),
           border: Border(top: BorderSide(color: Colors.black12, width: 5.0))),
       width: size.width,
-      height: 30.h,
+      height: 40.h,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children:

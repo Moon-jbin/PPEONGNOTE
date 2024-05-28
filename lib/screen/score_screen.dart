@@ -243,7 +243,7 @@ class ScoreListView extends HookConsumerWidget {
                   showScoreModifyDlgFn(context, scoreIdx: scoreIdx);
                 },
                 child: Container(
-                  height: 80.h, //50.h,
+                  height: 50.h,
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
