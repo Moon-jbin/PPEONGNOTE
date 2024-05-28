@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ppeongnote/providers/global_provider.dart';
+import 'package:ppeongnote/providers/score_provider.dart';
 import 'package:ppeongnote/utill/dialog/component/create_score.dart';
 import 'package:ppeongnote/utill/dialog/component/modify_score.dart';
 import 'package:ppeongnote/utill/dialog/component/penalty_dlg.dart';
@@ -80,10 +81,22 @@ showPenaltyDlgFn(BuildContext context, {required int type}) {
       context, (context) => customDialogForm(content: PenaltyDlg(type: type)));
 }
 
-// ///```
-// /// 저장 클릭시 나올 Dlg
-// ///```
-// showSaveDlgFn() {
-//   return showCustomDialog(
-//       context, (context) => customDialogForm(content: PenaltyDlg(type: type)));
-// }
+///```
+/// 저장 클릭시 나올 Dlg
+///```
+showSaveDlgFn(BuildContext context, WidgetRef ref,
+    {required ValueNotifier<bool> isGameEnd}) {
+  final scoreFunctionRead = ref.read(scoreFunctionProvider.notifier);
+  final spIndexWatch = ref.watch(spIndexProvider);
+  bool isModifyPage = spIndexWatch >= 0;
+  return showCustomDialog(
+      context,
+      (context) => customDialogForm(
+          content: OkCancelDlg(
+              title:
+                  isModifyPage ? "저장 하시겠습니까?" : "저장 하시겠습니까?\n저장 후 홈으로 이동합니다.",
+              onTap: () {
+                scoreFunctionRead.gameDataSave(context, ref,
+                    isGameEnd: isGameEnd);
+              })));
+}

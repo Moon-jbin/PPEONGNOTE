@@ -187,7 +187,8 @@ class CustomWidget {
   static Widget customDlgTitle(BuildContext context, {required String title}) {
     return Container(
       margin: EdgeInsets.symmetric(vertical: 10.h),
-      child: Text(title, style: CustomStyle.defaultStyle),
+      child: Text(title,
+          style: CustomStyle.defaultStyle, textAlign: TextAlign.center),
     );
 
     // Row(

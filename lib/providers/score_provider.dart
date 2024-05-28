@@ -3,6 +3,8 @@ import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ppeongnote/locator.dart';
 import 'package:ppeongnote/providers/global_provider.dart';
 import 'package:ppeongnote/service/shared_preferences_service.dart';
+import 'package:ppeongnote/utill/routing/navigation_service.dart';
+import 'package:ppeongnote/utill/routing/router_name.dart';
 
 final scoreFunctionProvider =
     StateNotifierProvider<ScoreFunctionProvider, Function>(
@@ -11,7 +13,8 @@ final scoreFunctionProvider =
 class ScoreFunctionProvider extends StateNotifier<Function> {
   ScoreFunctionProvider() : super(() {});
 
-  void gameDataSave(WidgetRef ref, {required ValueNotifier<bool> isGameEnd}) {
+  void gameDataSave(BuildContext context, WidgetRef ref,
+      {required ValueNotifier<bool> isGameEnd}) {
     final penaltyTitleWatch = ref.watch(penaltyTitleProvider);
     final playerNameProviderWatch = ref.watch(playerNameProvider);
     final penaltyContentWatch = ref.watch(penaltContentProvider);
@@ -83,6 +86,7 @@ class ScoreFunctionProvider extends StateNotifier<Function> {
               penaltyContent: penaltyContentWatch,
               date: customCurrentTime),
           spIndexWatch);
+      Navigator.pop(context);
     } else {
       sharedPreferncesService.setScoreData(ScoreDataInfo(
           nameList: playerNameProviderWatch,
@@ -91,6 +95,7 @@ class ScoreFunctionProvider extends StateNotifier<Function> {
           penaltyTitle: penaltyTitleWatch,
           penaltyContent: penaltyContentWatch,
           date: customCurrentTime));
+      NavigationService().routerGO(context, HomeRoute);
     }
 
     print(

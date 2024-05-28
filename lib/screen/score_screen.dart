@@ -19,7 +19,6 @@ class ScoreScreen extends HookConsumerWidget {
     final penaltyTitleWatch = ref.watch(penaltyTitleProvider);
     final playerNameProviderWatch = ref.watch(playerNameProvider);
     final penaltyContentWatch = ref.watch(penaltContentProvider);
-    final scoreFunctionRead = ref.read(scoreFunctionProvider.notifier);
     final spIndexRead = ref.read(spIndexProvider.notifier);
     final spIndexWatch = ref.watch(spIndexProvider);
 
@@ -84,7 +83,7 @@ class ScoreScreen extends HookConsumerWidget {
               onPressed: () {},
               child: IconButton(
                   onPressed: () {
-                    scoreFunctionRead.gameDataSave(ref, isGameEnd: isGameEnd);
+                    showSaveDlgFn(context, ref, isGameEnd: isGameEnd);
                   },
                   icon: Icon(Icons.save, color: Colors.blue.shade900)))
         ],
@@ -111,7 +110,16 @@ class MainUI extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
     final scoreProviderWatch = ref.watch(scoreProvider);
+    final scoreProviderRead = ref.read(scoreProvider.notifier);
     final playerNameProviderWatch = ref.watch(playerNameProvider);
+
+    useEffect(() {
+      return () {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          scoreProviderRead.initState();
+        });
+      };
+    }, []);
 
     return Container(
       // height: size.height,
