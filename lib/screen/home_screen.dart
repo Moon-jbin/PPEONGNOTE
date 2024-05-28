@@ -24,11 +24,13 @@ class MainUI extends HookConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Size size = MediaQuery.of(context).size;
+    double statusBarheight = MediaQuery.of(context).viewPadding.top;
+
     return SingleChildScrollView(
       child: Container(
           alignment: Alignment.center,
           width: size.width,
-          height: size.height,
+          height: size.height - statusBarheight,
           decoration: CustomWidget.bgColorWidget(),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
