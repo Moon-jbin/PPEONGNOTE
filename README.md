@@ -1,16 +1,55 @@
 # ppeongnote
 
-A new Flutter project.
+뻥공책 App
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+## apk 추출
+flutter build apk
 
-A few resources to get you started if this is your first Flutter project:
+## aab 추출
+flutter build appbundle
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+# Feature
+
+- 새로운 기능 추가
+
+# Fix
+
+- 버그 수정
+
+# Docs
+
+- 문서 수정
+
+# Test
+
+- 테스트 코드 추가
+
+# Refactor
+
+- 코드 리팩토링
+
+# Style
+
+- 코드 의미에 영향을 주지 않는 변경사항
+
+# Chore
+
+- 빌드 부분 혹은 패키지 매니저 수정사항
+
+---
+
+---
+
+---
+
+# GIT 메세지 적용법
+
+- git config --global commit.template .gitmessage.txt
+
+# 빌드 러너 사용법
+
+- flutter pub run build_runner build
