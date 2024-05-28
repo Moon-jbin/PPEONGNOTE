@@ -20,11 +20,10 @@ class RecordListScreen extends HookConsumerWidget {
 
     return Scaffold(
       backgroundColor: Colors.white,
+      drawer: null,
       appBar: AppBar(
         backgroundColor: Colors.white,
         centerTitle: true,
-        leading:
-            IconButton(onPressed: () {}, icon: const Icon(Icons.arrow_back)),
         title: Column(
           children: [
             const Text('게임 기록'),
@@ -53,9 +52,15 @@ class MainUI extends HookConsumerWidget {
         ref.read(penaltyContentViewProvider.notifier);
     final spIndexRead = ref.read(spIndexProvider.notifier);
 
+    Size size = MediaQuery.of(context).size;
+
     if (getScoreData.isEmpty) {
-      return const Center(
-        child: Text('기록이 없습니다.'),
+      return Container(
+        alignment: Alignment.center,
+        width: size.width,
+        height: size.height,
+        decoration: CustomWidget.bgColorWidget(),
+        child: Text('기록이 없습니다.', style: TextStyle(fontSize: 20.spMin)),
       );
     } else {
       Size size = MediaQuery.of(context).size;

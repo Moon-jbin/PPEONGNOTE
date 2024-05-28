@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ppeongnote/providers/global_provider.dart';
+import 'package:ppeongnote/utill/custom_style.dart';
 import 'package:ppeongnote/utill/dialog/dlg_function.dart';
 
 class CustomWidget {
@@ -169,7 +170,6 @@ class CustomWidget {
               : scoreProviderWatch[playerNameProviderWatch[playerIdx]]![1]
                   .last
                   .toString();
-          print('씌바 => $gameResultWatch');
 
           return Row(
             children: [
@@ -181,6 +181,80 @@ class CustomWidget {
           );
         }),
       ),
+    );
+  }
+
+  static Widget customDlgTitle(BuildContext context, {required String title}) {
+    return Container(
+      margin: EdgeInsets.symmetric(vertical: 10.h),
+      child: Text(title, style: CustomStyle.defaultStyle),
+    );
+
+    // Row(
+    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    //   children: [
+    //     // IconButton(
+    //     //     highlightColor: Colors.transparent,
+    //     //     onPressed: () {},
+    //     //     icon: const Icon(Icons.close, color: Colors.transparent)),
+    //     Container(
+    //       margin: EdgeInsets.symmetric(vertical: 10.h),
+    //       child: Text(title, style: CustomStyle.defaultStyle),
+    //     ),
+    //     // IconButton(
+    //     //     onPressed: () {
+    //     //       Navigator.pop(context);
+    //     //     },
+    //     //     icon: const Icon(Icons.close))
+    //   ],
+    // );
+  }
+
+  ///```
+  /// 커스텀 버튼
+  /// isExit : 종료 Dlg 구분
+  /// type : 0 -> 확인, type : 1 -> 취소
+  ///```
+  static Widget customBtn(
+      {required String title,
+      required int type,
+      bool isExit = false,
+      required VoidCallback onPressed}) {
+    TextStyle textStyleFn() {
+      if (isExit && type == 0) {
+        return const TextStyle(fontWeight: FontWeight.bold, color: Colors.red);
+      } else if (type == 0) {
+        return CustomStyle.defaultStyle;
+      } else {
+        return const TextStyle(
+            fontWeight: FontWeight.bold, color: Colors.black);
+      }
+    }
+
+    return TextButton(
+        onPressed: onPressed,
+        child: Container(
+          alignment: Alignment.center,
+          width: 50.w,
+          child: Text(title, style: textStyleFn()),
+        ));
+  }
+
+  static Widget dlgButtons(BuildContext context,
+      {bool isExit = false, required VoidCallback onPressed}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        CustomWidget.customBtn(
+            title: "취소",
+            type: 1,
+            onPressed: () {
+              Navigator.pop(context);
+            }),
+        SizedBox(width: 5.w),
+        CustomWidget.customBtn(
+            title: "확인", type: 0, isExit: isExit, onPressed: onPressed)
+      ],
     );
   }
 }

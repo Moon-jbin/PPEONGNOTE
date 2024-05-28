@@ -49,10 +49,7 @@ class CreateScore extends HookConsumerWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text('점수를 입력하세요.', style: CustomStyle.defaultStyle),
-            ),
+            CustomWidget.customDlgTitle(context, title: "점수를 입력하세요."),
             Column(
               children: List.generate(
                 playerNameProviderWatch.length,
@@ -61,119 +58,105 @@ class CreateScore extends HookConsumerWidget {
                     controller: tfControllerList.value[index]),
               ),
             ),
-            TextButton(
-                onPressed: () {
-                  int playerScore_1;
-                  int playerScore_2;
-                  int playerScore_3;
-                  int playerScore_4;
-                  int playerScore_5;
-                  List<int> tfControllerList;
-                  if (playerNameProviderWatch.length == 3) {
-                    if (tfController_1.text.isEmpty ||
-                        tfController_2.text.isEmpty ||
-                        tfController_3.text.isEmpty) return;
+            CustomWidget.dlgButtons(context, onPressed: () {
+              int playerScore_1;
+              int playerScore_2;
+              int playerScore_3;
+              int playerScore_4;
+              int playerScore_5;
+              List<int> tfControllerList;
+              if (playerNameProviderWatch.length == 3) {
+                if (tfController_1.text.isEmpty ||
+                    tfController_2.text.isEmpty ||
+                    tfController_3.text.isEmpty) return;
 
-                    // 3인 기준 (차후 4인 기준 5인 기준 나눌 것)
-                    playerScore_1 = int.parse(tfController_1.text);
-                    playerScore_2 = int.parse(tfController_2.text);
-                    playerScore_3 = int.parse(tfController_3.text);
-                    tfControllerList = [
-                      playerScore_1,
-                      playerScore_2,
-                      playerScore_3
-                    ];
-                  } else if (playerNameProviderWatch.length == 4) {
-                    if (tfController_1.text.isEmpty ||
-                        tfController_2.text.isEmpty ||
-                        tfController_3.text.isEmpty ||
-                        tfController_4.text.isEmpty) return;
+                // 3인 기준 (차후 4인 기준 5인 기준 나눌 것)
+                playerScore_1 = int.parse(tfController_1.text);
+                playerScore_2 = int.parse(tfController_2.text);
+                playerScore_3 = int.parse(tfController_3.text);
+                tfControllerList = [
+                  playerScore_1,
+                  playerScore_2,
+                  playerScore_3
+                ];
+              } else if (playerNameProviderWatch.length == 4) {
+                if (tfController_1.text.isEmpty ||
+                    tfController_2.text.isEmpty ||
+                    tfController_3.text.isEmpty ||
+                    tfController_4.text.isEmpty) return;
 
-                    // 3인 기준 (차후 4인 기준 5인 기준 나눌 것)
-                    playerScore_1 = int.parse(tfController_1.text);
-                    playerScore_2 = int.parse(tfController_2.text);
-                    playerScore_3 = int.parse(tfController_3.text);
-                    playerScore_4 = int.parse(tfController_4.text);
-                    tfControllerList = [
-                      playerScore_1,
-                      playerScore_2,
-                      playerScore_3,
-                      playerScore_4,
-                    ];
-                  } else {
-                    if (tfController_1.text.isEmpty ||
-                        tfController_2.text.isEmpty ||
-                        tfController_3.text.isEmpty ||
-                        tfController_4.text.isEmpty ||
-                        tfController_5.text.isEmpty) return;
+                // 3인 기준 (차후 4인 기준 5인 기준 나눌 것)
+                playerScore_1 = int.parse(tfController_1.text);
+                playerScore_2 = int.parse(tfController_2.text);
+                playerScore_3 = int.parse(tfController_3.text);
+                playerScore_4 = int.parse(tfController_4.text);
+                tfControllerList = [
+                  playerScore_1,
+                  playerScore_2,
+                  playerScore_3,
+                  playerScore_4,
+                ];
+              } else {
+                if (tfController_1.text.isEmpty ||
+                    tfController_2.text.isEmpty ||
+                    tfController_3.text.isEmpty ||
+                    tfController_4.text.isEmpty ||
+                    tfController_5.text.isEmpty) return;
 
-                    playerScore_1 = int.parse(tfController_1.text);
-                    playerScore_2 = int.parse(tfController_2.text);
-                    playerScore_3 = int.parse(tfController_3.text);
-                    playerScore_4 = int.parse(tfController_4.text);
-                    playerScore_5 = int.parse(tfController_5.text);
-                    tfControllerList = [
-                      playerScore_1,
-                      playerScore_2,
-                      playerScore_3,
-                      playerScore_4,
-                      playerScore_5,
-                    ];
-                  }
+                playerScore_1 = int.parse(tfController_1.text);
+                playerScore_2 = int.parse(tfController_2.text);
+                playerScore_3 = int.parse(tfController_3.text);
+                playerScore_4 = int.parse(tfController_4.text);
+                playerScore_5 = int.parse(tfController_5.text);
+                tfControllerList = [
+                  playerScore_1,
+                  playerScore_2,
+                  playerScore_3,
+                  playerScore_4,
+                  playerScore_5,
+                ];
+              }
 
-                  int playerIdx = 0;
-                  Map<String, List<List<int>>> scoreMap = {};
-                  for (String playerName in playerNameProviderWatch) {
-                    List<int> normalScoreList = scoreProviderWatch.isEmpty
-                        ? []
-                        : scoreProviderWatch[playerName]![0];
-                    List<int> sumScoreList = scoreProviderWatch.isEmpty
-                        ? []
-                        : scoreProviderWatch[playerName]![1];
-                    List<List<int>> playerScoreList = scoreProviderWatch.isEmpty
-                        ? []
-                        : scoreProviderWatch[playerName]!;
+              int playerIdx = 0;
+              Map<String, List<List<int>>> scoreMap = {};
+              for (String playerName in playerNameProviderWatch) {
+                List<int> normalScoreList = scoreProviderWatch.isEmpty
+                    ? []
+                    : scoreProviderWatch[playerName]![0];
+                List<int> sumScoreList = scoreProviderWatch.isEmpty
+                    ? []
+                    : scoreProviderWatch[playerName]![1];
+                List<List<int>> playerScoreList = scoreProviderWatch.isEmpty
+                    ? []
+                    : scoreProviderWatch[playerName]!;
 
-                    normalScoreList.add(tfControllerList[playerIdx]);
+                normalScoreList.add(tfControllerList[playerIdx]);
 
-                    if (sumScoreList.isEmpty) {
-                      sumScoreList.add(normalScoreList[0]);
-                    } else {
-                      int lastSumScore = sumScoreList[sumScoreList.length - 1];
-                      int lastNormalScore =
-                          normalScoreList[normalScoreList.length - 1];
+                if (sumScoreList.isEmpty) {
+                  sumScoreList.add(normalScoreList[0]);
+                } else {
+                  int lastSumScore = sumScoreList[sumScoreList.length - 1];
+                  int lastNormalScore =
+                      normalScoreList[normalScoreList.length - 1];
 
-                      sumScoreList.add(lastSumScore + lastNormalScore);
-                    }
-                    // for (int score in normalScoreList) {
-                    //   if (sumScoreList.isEmpty) {
-                    //     sumScoreList.add(score);
-                    //     break;
-                    //   } else {
-                    //     for(int sumScore in sumScoreList){
-                    //       normalScoreList[]
-                    //     }
-                    //     sumScoreList.add()
-                    //   }
-                    // }
+                  sumScoreList.add(lastSumScore + lastNormalScore);
+                }
 
-                    playerScoreList.add(normalScoreList);
-                    playerScoreList.add(sumScoreList);
-                    if (normalScoreList.length != 1 &&
-                        sumScoreList.length != 1) {
-                      playerScoreList.removeRange(2, 4);
-                    }
+                playerScoreList.add(normalScoreList);
+                playerScoreList.add(sumScoreList);
+                if (normalScoreList.length != 1 && sumScoreList.length != 1) {
+                  playerScoreList.removeRange(2, 4);
+                }
 
-                    playerIdx++;
+                playerIdx++;
 
-                    scoreMap[playerName] = playerScoreList;
-                  }
+                scoreMap[playerName] = playerScoreList;
+              }
 
-                  print(scoreMap);
-                  scoreProviderRead.setScore(scoreMap);
-                  Navigator.pop(context);
-                },
-                child: Text('확인'))
+              print(scoreMap);
+              scoreProviderRead.setScore(scoreMap);
+              Navigator.pop(context);
+            })
           ],
         ),
       ),

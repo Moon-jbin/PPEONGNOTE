@@ -27,14 +27,11 @@ class PlayerName extends HookConsumerWidget {
     return SingleChildScrollView(
       child: Container(
         padding: EdgeInsets.all(10.w),
-        width: size.width,
+        // width: size.width,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text('플레이어 이름을 적어주세요.', style: CustomStyle.defaultStyle),
-            ),
+            CustomWidget.customDlgTitle(context, title: "플레이어 이름을 적어주세요."),
             PlayerNameTextfeild(
                 type: type,
                 tfController_1: tfController_1,
@@ -42,49 +39,46 @@ class PlayerName extends HookConsumerWidget {
                 tfController_3: tfController_3,
                 tfController_4: tfController_4,
                 tfController_5: tfController_5),
-            TextButton(
-              onPressed: () {
-                List<String> playerNameList = [];
-                if (type == 3) {
-                  if (tfController_1.text.isEmpty ||
-                      tfController_2.text.isEmpty ||
-                      tfController_3.text.isEmpty) return;
+            CustomWidget.dlgButtons(context, onPressed: () {
+              List<String> playerNameList = [];
+              if (type == 3) {
+                if (tfController_1.text.isEmpty ||
+                    tfController_2.text.isEmpty ||
+                    tfController_3.text.isEmpty) return;
 
-                  playerNameList.add(tfController_1.text);
-                  playerNameList.add(tfController_2.text);
-                  playerNameList.add(tfController_3.text);
-                } else if (type == 4) {
-                  if (tfController_1.text.isEmpty ||
-                      tfController_2.text.isEmpty ||
-                      tfController_3.text.isEmpty ||
-                      tfController_4.text.isEmpty) return;
+                playerNameList.add(tfController_1.text);
+                playerNameList.add(tfController_2.text);
+                playerNameList.add(tfController_3.text);
+              } else if (type == 4) {
+                if (tfController_1.text.isEmpty ||
+                    tfController_2.text.isEmpty ||
+                    tfController_3.text.isEmpty ||
+                    tfController_4.text.isEmpty) return;
 
-                  playerNameList.add(tfController_1.text);
-                  playerNameList.add(tfController_2.text);
-                  playerNameList.add(tfController_3.text);
-                  playerNameList.add(tfController_4.text);
-                } else {
-                  if (tfController_1.text.isEmpty ||
-                      tfController_2.text.isEmpty ||
-                      tfController_3.text.isEmpty ||
-                      tfController_4.text.isEmpty ||
-                      tfController_5.text.isEmpty) return;
+                playerNameList.add(tfController_1.text);
+                playerNameList.add(tfController_2.text);
+                playerNameList.add(tfController_3.text);
+                playerNameList.add(tfController_4.text);
+              } else {
+                if (tfController_1.text.isEmpty ||
+                    tfController_2.text.isEmpty ||
+                    tfController_3.text.isEmpty ||
+                    tfController_4.text.isEmpty ||
+                    tfController_5.text.isEmpty) return;
 
-                  playerNameList.add(tfController_1.text);
-                  playerNameList.add(tfController_2.text);
-                  playerNameList.add(tfController_3.text);
-                  playerNameList.add(tfController_4.text);
-                  playerNameList.add(tfController_5.text);
-                }
+                playerNameList.add(tfController_1.text);
+                playerNameList.add(tfController_2.text);
+                playerNameList.add(tfController_3.text);
+                playerNameList.add(tfController_4.text);
+                playerNameList.add(tfController_5.text);
+              }
 
-                playerNameProviderRead.setPlayer(playerNameList);
+              playerNameProviderRead.setPlayer(playerNameList);
 
-                Navigator.pop(context);
-                showPenaltyDlgFn(context, type: type);
-                // NavigationService().routerReplace(context, ScoreRoute);
-              },
-              child: Text('확인', style: CustomStyle.defaultStyle),
-            ),
+              Navigator.pop(context);
+              showPenaltyDlgFn(context, type: type);
+            })
+
           ],
         ),
       ),
@@ -113,40 +107,34 @@ class PlayerNameTextfeild extends HookConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     ValueNotifier<List<TextEditingController>> trControllerList = useState([]);
 
-    Widget playerTfList(){
+    Widget playerTfList() {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: List.generate(
             type,
-                (index) => Container(
-              margin: EdgeInsets.all(10.w),
-              child: Row(
-                children: [
-                  Text(
-                    'Player ${index + 1} : ',
-                    style: CustomStyle.defaultStyle,
+            (index) => Container(
+                  margin: EdgeInsets.all(10.w),
+                  child: Row(
+                    children: [
+                      Text(
+                        '플레이어 ${index + 1} : ',
+                        style: CustomStyle.defaultStyle,
+                      ),
+                      Expanded(
+                          child: CustomWidget.customTextField(
+                              trControllerList.value[index]))
+                    ],
                   ),
-                  Expanded(
-                      child: CustomWidget.customTextField(
-                          trControllerList.value[index],
-                          hintText: "Player Name"
-                      ))
-                ],
-              ),
-            )),
+                )),
       );
     }
 
     if (type == 3) {
-      trControllerList.value = [
-        tfController_1,
-        tfController_2,
-        tfController_3
-      ];
+      trControllerList.value = [tfController_1, tfController_2, tfController_3];
 
       return playerTfList();
     } else if (type == 4) {
-       trControllerList.value = [
+      trControllerList.value = [
         tfController_1,
         tfController_2,
         tfController_3,

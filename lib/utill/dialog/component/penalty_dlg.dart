@@ -8,10 +8,9 @@ import 'package:ppeongnote/utill/custom_style.dart';
 import 'package:ppeongnote/utill/routing/navigation_service.dart';
 import 'package:ppeongnote/utill/routing/router_name.dart';
 
-class PenaltyDlg extends HookConsumerWidget{
+class PenaltyDlg extends HookConsumerWidget {
   int type;
   PenaltyDlg({super.key, required this.type});
-
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,7 +19,7 @@ class PenaltyDlg extends HookConsumerWidget{
     Size size = MediaQuery.of(context).size;
 
     TextEditingController penaltyTfController = useTextEditingController();
-    
+
     TextEditingController tfController_1 = useTextEditingController();
     TextEditingController tfController_2 = useTextEditingController();
     TextEditingController tfController_3 = useTextEditingController();
@@ -29,42 +28,43 @@ class PenaltyDlg extends HookConsumerWidget{
 
     return SingleChildScrollView(
       child: Container(
+        // width: size.width,
         margin: EdgeInsets.all(10.w),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            CustomWidget.customDlgTitle(context, title: "벌칙을 입력하세요."),
             Container(
-              margin: EdgeInsets.symmetric(vertical: 10.h),
-              child: Text('벌칙을 입력해주세요.',style: CustomStyle.defaultStyle,),
-            ),
-            Container(
-              margin: EdgeInsets.symmetric(vertical: 10.h),
-              child:
-              Row(
-                children: [
-                  Text('벌칙 내용 : ',style: CustomStyle.defaultStyle),
-                  Expanded(
-                      child:CustomWidget.customTextField(penaltyTfController,
-                      hintText: "주제"))
-                ],
-              )
-            ),
-            PenaltyTextFeild(type: type, tfController_1: tfController_1, tfController_2: tfController_2, tfController_3: tfController_3, tfController_4: tfController_4, tfController_5: tfController_5),
-            TextButton(onPressed: (){
+                margin: EdgeInsets.symmetric(vertical: 10.h),
+                child: Row(
+                  children: [
+                    Text('벌칙 내용 : ', style: CustomStyle.defaultStyle),
+                    Expanded(
+                        child: CustomWidget.customTextField(penaltyTfController,
+                            hintText: "주제"))
+                  ],
+                )),
+            PenaltyTextFeild(
+                type: type,
+                tfController_1: tfController_1,
+                tfController_2: tfController_2,
+                tfController_3: tfController_3,
+                tfController_4: tfController_4,
+                tfController_5: tfController_5),
+            CustomWidget.dlgButtons(context, onPressed: () {
               //벌칙 내용
               List<String> penaltyList = [];
               Map<String, String> penaltyData = {};
-              if(type == 3){
+              if (type == 3) {
                 penaltyList.add(tfController_1.text);
                 penaltyList.add(tfController_2.text);
                 penaltyList.add(tfController_3.text);
-              }else if(type ==4){
+              } else if (type == 4) {
                 penaltyList.add(tfController_1.text);
                 penaltyList.add(tfController_2.text);
                 penaltyList.add(tfController_3.text);
                 penaltyList.add(tfController_4.text);
-
-              }else {
+              } else {
                 penaltyList.add(tfController_1.text);
                 penaltyList.add(tfController_2.text);
                 penaltyList.add(tfController_3.text);
@@ -72,8 +72,8 @@ class PenaltyDlg extends HookConsumerWidget{
                 penaltyList.add(tfController_5.text);
               }
 
-              for(int i=0; i<type;i++){
-                penaltyData["${i+1}"] = penaltyList[i];
+              for (int i = 0; i < type; i++) {
+                penaltyData["${i + 1}"] = penaltyList[i];
               }
               penaltContentRead.setContent(penaltyData);
 
@@ -81,19 +81,15 @@ class PenaltyDlg extends HookConsumerWidget{
               penaltyTitleRead.setTitle(penaltyTfController.text);
               Navigator.pop(context);
               NavigationService().routerReplace(context, ScoreRoute);
-
-            }, child: Text('확인'))
+            })
           ],
         ),
-      )
-
-      ,
+      ),
     );
-
   }
 }
 
-class PenaltyTextFeild extends HookConsumerWidget{
+class PenaltyTextFeild extends HookConsumerWidget {
   int type;
   TextEditingController tfController_1;
   TextEditingController tfController_2;
@@ -102,47 +98,42 @@ class PenaltyTextFeild extends HookConsumerWidget{
   TextEditingController tfController_5;
   PenaltyTextFeild(
       {super.key,
-        required this.type,
-        required this.tfController_1,
-        required this.tfController_2,
-        required this.tfController_3,
-        required this.tfController_4,
-        required this.tfController_5});
+      required this.type,
+      required this.tfController_1,
+      required this.tfController_2,
+      required this.tfController_3,
+      required this.tfController_4,
+      required this.tfController_5});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     ValueNotifier<List<TextEditingController>> trControllerList = useState([]);
-    Widget penaltyTfList(){
+    Widget penaltyTfList() {
       return Column(
         mainAxisSize: MainAxisSize.min,
         children: List.generate(
             type,
-                (index) => Container(
-              margin: EdgeInsets.all(10.w),
-              child: Row(
-                children: [
-                  Text(
-                    '${index + 1} 등 : ',
-                    style: CustomStyle.defaultStyle,
+            (index) => Container(
+                  margin: EdgeInsets.all(10.w),
+                  child: Row(
+                    children: [
+                      Text(
+                        '${index + 1} 등 : ',
+                        style: CustomStyle.defaultStyle,
+                      ),
+                      Expanded(
+                          child: CustomWidget.customTextField(
+                              trControllerList.value[index]))
+                    ],
                   ),
-                  Expanded(
-                      child: CustomWidget.customTextField(
-                          trControllerList.value[index]))
-                ],
-              ),
-            )),
+                )),
       );
     }
 
-
-    if(type == 3){
-      trControllerList.value = [
-        tfController_1,
-        tfController_2,
-        tfController_3
-      ];
-return penaltyTfList();
-    }else if(type ==4){
+    if (type == 3) {
+      trControllerList.value = [tfController_1, tfController_2, tfController_3];
+      return penaltyTfList();
+    } else if (type == 4) {
       trControllerList.value = [
         tfController_1,
         tfController_2,
@@ -150,7 +141,7 @@ return penaltyTfList();
         tfController_4,
       ];
       return penaltyTfList();
-    }else {
+    } else {
       trControllerList.value = [
         tfController_1,
         tfController_2,

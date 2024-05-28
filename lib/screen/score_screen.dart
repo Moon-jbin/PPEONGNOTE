@@ -92,7 +92,11 @@ class ScoreScreen extends HookConsumerWidget {
       body: PopScope(
         canPop: false,
         onPopInvoked: (didPop) {
-          showBackNoticeDlgFn(context);
+          if (ismodifyPage) {
+            Navigator.pop(context);
+          } else {
+            showBackNoticeDlgFn(context, ref);
+          }
         },
         child: MainUI(isGameEnd: isGameEnd),
       ),

@@ -12,7 +12,7 @@ showCustomDialog(BuildContext context, Function showWidget,
   return await showGeneralDialog(
       barrierColor: Colors.black.withOpacity(0.5),
       barrierLabel: '',
-      barrierDismissible: false,
+      barrierDismissible: true,
       context: context,
       routeSettings: routeSettings,
       pageBuilder: (context, animation1, animation2) => showWidget(context));
@@ -24,10 +24,9 @@ showCustomDialog(BuildContext context, Function showWidget,
 ///```
 customDialogForm({required Widget content}) {
   return AlertDialog(
-    contentPadding: EdgeInsets.zero,
-    shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.all(Radius.circular(30))),
-    elevation: 10,
-    content: content,
-  );
+      contentPadding: EdgeInsets.zero,
+      shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(30))),
+      elevation: 10,
+      content: content);
 }

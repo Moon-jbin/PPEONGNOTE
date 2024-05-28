@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
+import 'package:ppeongnote/providers/global_provider.dart';
 import 'package:ppeongnote/utill/dialog/component/create_score.dart';
 import 'package:ppeongnote/utill/dialog/component/modify_score.dart';
 import 'package:ppeongnote/utill/dialog/component/penalty_dlg.dart';
 import 'package:ppeongnote/utill/dialog/component/player_name.dart';
 import 'package:ppeongnote/utill/dialog/component/scoreback_notice.dart';
 import 'package:ppeongnote/utill/dialog/dlg_form.dart';
+import 'package:ppeongnote/utill/routing/navigation_service.dart';
+import 'package:ppeongnote/utill/routing/router_name.dart';
 
 ///```
 /// Example
@@ -52,18 +56,34 @@ showPlayerNameDlgFn(BuildContext context, {required int type}) {
 ///```
 /// 스코어 페이지에서 뒤로갈 때 나오는 Dlg
 ///```
-showBackNoticeDlgFn(BuildContext context) {
+showBackNoticeDlgFn(BuildContext context, WidgetRef ref) {
+  final scoreProviderRead = ref.read(scoreProvider.notifier);
+  final playerNameProviderRead = ref.read(playerNameProvider.notifier);
   return showCustomDialog(
-      context, (context) => customDialogForm(content: ScoreBackNotice()));
+      context,
+      (context) => customDialogForm(
+              content: OkCancelDlg(
+            title: "종료 하시겠습니까?",
+            onTap: () {
+              scoreProviderRead.initState();
+              playerNameProviderRead.initState();
+              NavigationService().routerGO(context, HomeRoute);
+            },
+          )));
 }
-
 
 ///```
 /// 벌칙 입력 Dlg
 ///```
-showPenaltyDlgFn(BuildContext context, {
-  required int type
-}){
+showPenaltyDlgFn(BuildContext context, {required int type}) {
   return showCustomDialog(
       context, (context) => customDialogForm(content: PenaltyDlg(type: type)));
 }
+
+// ///```
+// /// 저장 클릭시 나올 Dlg
+// ///```
+// showSaveDlgFn() {
+//   return showCustomDialog(
+//       context, (context) => customDialogForm(content: PenaltyDlg(type: type)));
+// }

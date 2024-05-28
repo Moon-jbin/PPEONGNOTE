@@ -91,10 +91,7 @@ class ModifyScore extends HookConsumerWidget {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 10.h),
-            child: Text('점수를 수정하세요.', style: CustomStyle.defaultStyle),
-          ),
+          CustomWidget.customDlgTitle(context, title: "점수를 수정하세요."),
           Column(
             children: List.generate(
                 playerNameProviderWatch.length,
