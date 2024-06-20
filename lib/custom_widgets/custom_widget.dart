@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:ppeongnote/providers/global_provider.dart';
@@ -59,6 +60,9 @@ class CustomWidget {
       autofocus: true,
       controller: controller,
       keyboardType: keyboardType,
+      inputFormatters: <TextInputFormatter>[
+        FilteringTextInputFormatter.allow(RegExp(r'^-?\d+'))
+      ],
       decoration: InputDecoration(
         hintText: hintText,
         border: OutlineInputBorder(
@@ -89,7 +93,8 @@ class CustomWidget {
           Text("$playerName : "),
           Expanded(
               child: customTextField(controller,
-                  keyboardType: TextInputType.number))
+                  keyboardType:
+                      const TextInputType.numberWithOptions(signed: true)))
         ],
       ),
     );
