@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/framework.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:ppeongnote/locator.dart';
@@ -44,8 +42,8 @@ class CustomDrawer extends HookConsumerWidget {
                   onTap: () {
                     if (index == 0) {
                       //게임 기록
-                      NavigationService()
-                          .routerReplace(context, RecordListRoute);
+                      // NavigationService()
+                      //     .routerReplace(context, RecordListRoute);
                     } else if (index == 1) {
                       //설정
                     }
