@@ -60,9 +60,6 @@ class CustomWidget {
       autofocus: true,
       controller: controller,
       keyboardType: keyboardType,
-      inputFormatters: <TextInputFormatter>[
-        FilteringTextInputFormatter.allow(RegExp(r'^-?\d+'))
-      ],
       decoration: InputDecoration(
         hintText: hintText,
         border: OutlineInputBorder(

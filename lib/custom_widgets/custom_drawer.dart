@@ -15,7 +15,8 @@ class CustomDrawer extends HookConsumerWidget {
     final SharedPreferencesService sharedPreferncesService =
         locator<SharedPreferencesService>();
     List<ScoreDataInfo> getScoreData = sharedPreferncesService.getScoreData();
-    List<String> settingTitle = ["게임 기록", "설정"];
+    // List<String> settingTitle = ["게임 기록", "설정"];
+    List<String> settingTitle = ["설정"];
     ValueNotifier<String> versionCode = useState('');
 
     void initVersion() async {

@@ -113,6 +113,10 @@ class MainUI extends HookConsumerWidget {
     final scoreProviderRead = ref.read(scoreProvider.notifier);
     final playerNameProviderWatch = ref.watch(playerNameProvider);
 
+    int scoreLength = scoreProviderWatch[playerNameProviderWatch[0]] != null
+        ? scoreProviderWatch[playerNameProviderWatch[0]]![0].length
+        : 0;
+
     useEffect(() {
       return () {
         WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -160,11 +164,24 @@ class MainUI extends HookConsumerWidget {
                     ),
                     scoreProviderWatch[playerNameProviderWatch[0]] == null
                         ? Container()
-                        : IconButton(
-                            onPressed: () {
-                              showScoreCreateDlgFn(context);
-                            },
-                            icon: const Icon(Icons.add))
+                        : Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              const SizedBox(width: 50, height: 20),
+                              IconButton(
+                                  onPressed: () {
+                                    showScoreCreateDlgFn(context);
+                                  },
+                                  icon: const Icon(Icons.add)),
+                              SizedBox(
+                                width: 50,
+                                height: 20,
+                                child: Text('$scoreLength 번째',
+                                    style: const TextStyle(
+                                        fontWeight: FontWeight.bold)),
+                              ),
+                            ],
+                          )
                   ],
                 ),
               )),
@@ -229,6 +246,14 @@ class ScoreListView extends HookConsumerWidget {
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
             itemCount: scoreLength,
+            // separatorBuilder: (BuildContext context, int scoreIdx) {
+            //   // print("scoreLength = >${scoreLength}");
+            //   return Container(
+            //     width: 400,
+            //     height: 20,
+            //     color: Colors.red,
+            //   );
+            // },
             itemBuilder: (BuildContext context, int scoreIdx) {
               String playerScore =
                   scoreProviderWatch[playerNameProviderWatch[playerIdx]]![0]
